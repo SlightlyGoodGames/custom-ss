@@ -13,6 +13,12 @@ and they will do so automatically after 30 minutes. Dimming by waiting will not 
 CUBE:
 Scroll up and down to change size of the cubes. Again, pressing the middle mouse button will dim it and it will do so after 30 minutes.
 
+HUE SHIFT:
+*WARNING:* This is a strobing effect and may cause migraines/seizures. Please be careful! No customisation is provided.
+
+BLOOM:
+Non-functional. Only a .py file is there and it may not be launched from screensaver.txt
+
 No installer or screensaver GUI is provided, these may come in future updates.
 Thank you!
 
