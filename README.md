@@ -1,4 +1,7 @@
 This is a custom screensaver* configurer for Windows.
+
+You must install all files (except Custom.scr) in C:/Screensavers (spelled exactly). No interface yet allows you to change this folder.
+
 It includes "Custom.scr" (which should be dropped into System32), screensaver.txt and 4 screensavers. Please only use "cube" and "ellipsis" currently. (bloom does not work and hue-shift uses a lot of gpu power).
 Then, enter "Change screen saver" in the search bar and in the dropdown, "Custom" should pop up. Click this.
 Please edit screensaver.txt (there is no GUI yet) to your desired screensaver + "/.exe" (e.g. ellipsis/.exe). Python files are also present in the folders, as are configuration files.
