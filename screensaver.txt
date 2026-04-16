@@ -1,1 +1,1 @@
-cube/.exe
+cube/scrnsave.exe

@@ -4,7 +4,7 @@ You must install all files (except Custom.scr) in C:/Screensavers (spelled exact
 
 It includes "Custom.scr" (which should be dropped into System32), screensaver.txt and 4 screensavers. Please only use "cube" and "ellipsis" currently. (bloom does not work and hue-shift uses a lot of gpu power).
 Then, enter "Change screen saver" in the search bar and in the dropdown, "Custom" should pop up. Click this.
-Please edit screensaver.txt (there is no GUI yet) to your desired screensaver + "/.exe" (e.g. ellipsis/.exe). Python files are also present in the folders, as are configuration files.
+Either edit screensaver.txt to your desired screensaver + "/scrnsave.exe" or use configure.exe for an easier process. Python files are also present in the folders, as are configuration files.
 
 ELLIPSIS:
 Scroll up and down to change dot colour. Scrolling up at white or down at indigo will activate rainbow mode, in which the dots cycle between red and indigo. Pressing the middle mouse button dims the dots
@@ -13,13 +13,9 @@ and they will do so automatically after 30 minutes. Dimming by waiting will not 
 CUBE:
 Scroll up and down to change size of the cubes. Again, pressing the middle mouse button will dim it and it will do so after 30 minutes.
 
-HUE SHIFT:
-*WARNING:* This is a strobing effect and may cause migraines/seizures. Please be careful! No customisation is provided.
+"hue-shift" and "bloom" are currently non-functional.
 
-BLOOM:
-Non-functional. Only a .py file is there and it may not be launched from screensaver.txt
-
-No installer or screensaver GUI is provided, these may come in future updates.
+No installer is provided, this may come in future updates.
 Thank you!
 
 * Warning: if you have the type of screen that burns in without a screensaver, *do not use these screensavers*

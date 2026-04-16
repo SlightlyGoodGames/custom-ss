@@ -1,0 +1,9 @@
+id: 1
+name: Ellipsis
+codename: ellipsis
+desc: Three dots fading in and out. Brightness and colours are configurable!
+added: v0.1
+config:
+  colour: Colour
+  dimmed: Dimmed
+  rainbow: Rainbow Mode
