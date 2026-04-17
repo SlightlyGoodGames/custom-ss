@@ -3,6 +3,8 @@ name: Ellipsis
 codename: ellipsis
 desc: Three dots fading in and out. Brightness and colours are configurable!
 added: v0.1
+complete: true
+hasconfig: true
 config:
   colour: Colour
   dimmed: Dimmed
