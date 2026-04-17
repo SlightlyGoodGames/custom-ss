@@ -19,7 +19,7 @@ for i in allfolders:
             allids.update({thisdata["id"]:i})
             alldata.update({i:thisdata})
     else:
-        alldata.update({i:{"id":-1,"name":i,"codename":i,"desc":"Description not given.","added":"Unknown version","finished":False,"hasconfig":False,"config":{}}})
+        alldata.update({i:{"id":-1,"name":i,"codename":i,"desc":"Description not given.","added":"Unknown version","complete":False,"hasconfig":False,"config":{}}})
     if os.path.exists("C:/Screensavers/"+i+"/config.yaml"):
         with open("C:/Screensavers/"+i+"/config.yaml") as f:
             thisdata = yaml.safe_load(f)
@@ -67,6 +67,6 @@ while True:
                         yaml.dump(viewconf,f)
                     print("Successfully written to file!")
                 if setasscrn == "y":
-                    with open("C:/Screensavers/screensaver.txt","w") as f:
-                        f.write(viewdata["codename"] + "/scrnsave.exe")
+                    with open("C:/Screensavers/globalconfig.yaml","w") as f:
+                        yaml.dump({"screensaver":viewdata["codename"]},f)
                     print("Successfully set as screensaver!")
