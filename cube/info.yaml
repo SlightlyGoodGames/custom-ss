@@ -2,7 +2,7 @@ id: 2
 name: Cube
 codename: cube
 desc: A scrolling cube with many colours. Size and brightness are configurable!
-added: v0.
+added: v0.1
 complete: true
 hasconfig: true
 config:

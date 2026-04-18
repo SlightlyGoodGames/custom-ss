@@ -1,1 +1,4 @@
-screensaver: ellipsis
+cycle:
+- ellipsis
+- cube
+screensaver: 1
