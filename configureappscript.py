@@ -1,11 +1,13 @@
 import yaml,os
 
-print("Welcome to the Custom SS configuration.\nRetrieving information...")
+print("Welcome to the Custom SS configuration.\nRetrieving screensaver data and config...")
 allfolders = [f for f in os.listdir("C:/Screensavers") if not os.path.isfile("C:/Screensavers/"+f) and f != ".git"]
 
 alldata = {}
 allconf = {}
 allids = {}
+globalconf = {}
+globaldata = {}
 sort = []
 
 for i in range(len(allfolders)):
@@ -27,46 +29,97 @@ for i in allfolders:
     else:
         allconf.update({i:{}})
 
-workingscrnsave = 0
+with open("C:/Screensavers/globalconfig.yaml","r") as f:
+    globalconf = yaml.safe_load(f)
 
-for i in sort:
-    if i != "ph":
-        workingscrnsave += 1
+with open("C:/Screensavers/globalinfo.yaml","r") as f:
+    globaldata = yaml.safe_load(f)
 
-print("\nFound " + str(workingscrnsave) + " screensavers:\n")
-for i in sort:
-    if i != "ph":
-        this = alldata[i]
-        if this["id"] != -1:
-            print("ID: " + str(this["id"]) + "\nName: " + this["name"] + " [" + i + "]\nDescription: " + this["desc"] + "\nAdded: " + this["added"] + "\nComplete: " + str(this["complete"]) + "\n")
-        else:
-            print("Codename: " + this["name"] + "\nNo information has been added for this entry.\n")
+def printscrlist():
+    workingscrnsave = 0
+    for i in sort:
+        if i != "ph":
+            workingscrnsave += 1
+    print("\nFound " + str(workingscrnsave) + " screensavers:\n")
+    for i in sort:
+        if i != "ph":
+            this = alldata[i]
+            if this["id"] != -1:
+                print("ID: " + str(this["id"]) + "\nName: " + this["name"] + " [" + i + "]\nDescription: " + this["desc"] + "\nAdded: " + this["added"] + "\nComplete: " + str(this["complete"]) + "\n")
+            else:
+                print("Codename: " + this["name"] + "\nNo information has been added for this entry.\n")
 
 while True:
-    view = int(input("Enter the ID of what you would like to edit/view: "))
-    try:
-        viewdata = alldata[allids[view]]
-        viewconf = allconf[allids[view]]
-    except KeyError:
-        print("Invalid ID.")
-    else:
-        reallydo = input("View/edit " + viewdata["name"] + " (Y/N)? ").lower()
-        if reallydo == "y":
-            for i in viewconf:
-                tochange = input(viewdata["config"][i] + " [" + i + "]: " + str(viewconf[i]) + " ")
-                if tochange != "":
-                    if isinstance(viewconf[i],int):
-                        viewconf[i] = int(tochange)
-                    elif isinstance(viewconf[i],bool):
-                        viewconf[i] = tochange.lower() == "true"
-            setasscrn = input("Set as current screensaver (Y/N)? ")
-            reallydo2 = input("Save changes (Y/N)? ").lower()
-            if reallydo2 == "y":
-                if viewdata["hasconfig"]:
-                    with open("C:/Screensavers/" + viewdata["codename"] + "/config.yaml","w") as f:
-                        yaml.dump(viewconf,f)
-                    print("Successfully written to file!")
-                if setasscrn == "y":
+    option = int(input("1) Edit / view configuration\n2) Set default screensaver\n3) View info\nWhat would you like to do? "))
+    if option == 1:
+        printscrlist()
+        view = int(input("Enter the ID of what you would like to edit/view: "))
+        try:
+            viewdata = alldata[allids[view]]
+            viewconf = allconf[allids[view]]
+        except KeyError:
+            print("Invalid ID.")
+        else:
+            reallydo = input("View/edit " + viewdata["name"] + " (Y/N)? ").lower()
+            if reallydo == "y":
+                for i in viewconf:
+                    tochange = input(viewdata["config"][i] + " [" + i + "]: " + str(viewconf[i]) + " ")
+                    if tochange != "":
+                        if isinstance(viewconf[i],int):
+                            viewconf[i] = int(tochange)
+                        elif isinstance(viewconf[i],bool):
+                            viewconf[i] = tochange.lower() == "true"
+                setasscrn = input("Set as current screensaver (Y/N)? ")
+                reallydo2 = input("Save changes (Y/N)? ").lower()
+                if reallydo2 == "y":
+                    if viewdata["hasconfig"]:
+                        with open("C:/Screensavers/" + viewdata["codename"] + "/config.yaml","w") as f:
+                            yaml.dump(viewconf,f)
+                        print("Successfully written to file!\n")
+                    if setasscrn == "y":
+                        with open("C:/Screensavers/globalconfig.yaml","w") as f:
+                            yaml.dump({"cycle":[viewdata["codename"]],"screensaver":0},f)
+                        print("Successfully set as screensaver!\n")
+    elif option == 2:
+        cycleqm = input("Would you like cycling screensavers? ").lower()
+        printscrlist()
+        if len(globalconf["cycle"]) > 1:
+            scrarray = globalconf["cycle"]
+            scrnames = []
+            for scr in scrarray:
+                scrnames.append(alldata[scr]["name"])
+            print("Current screensavers: " + ", ".join(scrnames) + "\nPress ENTER to keep current screensavers.")
+        else:
+            print("Current screensaver: " + alldata[globalconf["cycle"][0]]["name"] + "\nPress ENTER to keep current screensaver.")
+        if cycleqm == "y":
+            newscr = input("What are the new screensaver's IDs (separated by commas)? ")
+            if newscr != "":
+                newscrlist = newscr.split(",")
+                newscrcodes = []
+                newscrnames = []
+                c = 0
+                for scr in newscrlist:
+                    newscrlist[c] = scr = int(scr)
+                    newscrname = sort[scr-1]
+                    newscrcodes.append(newscrname)
+                    newscrnames.append(alldata[newscrname]["name"])
+                    c += 1
+                reallydo = input("Change your screensavers to " + ", ".join(newscrnames) + " (Y/N)? ").lower()
+                if reallydo == "y":
+                    globalconf = {"cycle":newscrcodes,"screensaver":0}
                     with open("C:/Screensavers/globalconfig.yaml","w") as f:
-                        yaml.dump({"screensaver":viewdata["codename"]},f)
-                    print("Successfully set as screensaver!")
+                        yaml.dump(globalconf,f)
+                    print("Successfully set a cycling screensaver!\n")
+
+        else:
+            newscr = input("What is the new screensaver's ID? ")
+            if newscr != "":
+                newscrname = sort[int(newscr)-1]
+                reallydo = input("Change your screensaver to " + alldata[newscrname]["name"] + " (Y/N)? ").lower()
+                if reallydo == "y":
+                    globalconf = {"cycle":[newscrname],"screensaver":0}
+                    with open("C:/Screensavers/globalconfig.yaml","w") as f:
+                        yaml.dump(globalconf,f)
+                    print("Successfully set as screensaver!\n")
+    elif option == 3:
+        print("\nCustom SS Update Information\n\n" + globaldata["version"] + "\nTitle: " + globaldata["vertitle"] + "\nDescription: " + globaldata["verdesc"] + "\nDate updated: " + globaldata["date"] + "\n")
