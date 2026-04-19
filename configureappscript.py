@@ -1,51 +1,54 @@
-import yaml,os
+import yaml,os,sys
+
+def localfile(path1,path2=None):
+    if path2 == None:
+        return os.path.join(parentpath,path1)
+    else:
+        return os.path.join(parentpath,path1,path2)
 
 print("Welcome to the Custom SS configuration.\nRetrieving screensaver data and config...")
-allfolders = [f for f in os.listdir("C:/Screensavers") if not os.path.isfile("C:/Screensavers/"+f) and f != ".git"]
+if sys.executable.split("\\")[-1] != "python.exe":
+    parentpath = os.path.dirname(sys.executable)
+else:
+    parentpath = os.path.dirname(__file__)
+allfolders = [f for f in os.listdir(parentpath) if not os.path.isfile(localfile(f)) and f != ".git"]
 
 alldata = {}
 allconf = {}
 allids = {}
 globalconf = {}
 globaldata = {}
-sort = []
 
-for i in range(len(allfolders)):
-    sort.append("ph")
 
 for i in allfolders:
-    if os.path.exists("C:/Screensavers/"+i+"/info.yaml"):
-        with open("C:/Screensavers/"+i+"/info.yaml") as f:
+    if os.path.exists(localfile(i,"info.yaml")):
+        with open(localfile(i,"info.yaml"),"r") as f:
             thisdata = yaml.safe_load(f)
-            sort[thisdata["id"]-1] = i
             allids.update({thisdata["id"]:i})
             alldata.update({i:thisdata})
     else:
         alldata.update({i:{"id":-1,"name":i,"codename":i,"desc":"Description not given.","added":"Unknown version","complete":False,"hasconfig":False,"config":{}}})
-    if os.path.exists("C:/Screensavers/"+i+"/config.yaml"):
-        with open("C:/Screensavers/"+i+"/config.yaml") as f:
+    if os.path.exists(localfile(i,"config.yaml")):
+        with open(localfile(i,"config.yaml"),"r") as f:
             thisdata = yaml.safe_load(f)
             allconf.update({i:thisdata})
     else:
         allconf.update({i:{}})
 
-with open("C:/Screensavers/globalconfig.yaml","r") as f:
+with open(localfile("globalconfig.yaml"),"r") as f:
     globalconf = yaml.safe_load(f)
 
-with open("C:/Screensavers/globalinfo.yaml","r") as f:
+with open(localfile("globalinfo.yaml"),"r") as f:
     globaldata = yaml.safe_load(f)
 
 def printscrlist():
-    workingscrnsave = 0
-    for i in sort:
-        if i != "ph":
-            workingscrnsave += 1
+    workingscrnsave = len(allids)
     print("\nFound " + str(workingscrnsave) + " screensavers:\n")
-    for i in sort:
+    for i in dict(sorted(allids.items())):
         if i != "ph":
-            this = alldata[i]
+            this = alldata[allids[i]]
             if this["id"] != -1:
-                print("ID: " + str(this["id"]) + "\nName: " + this["name"] + " [" + i + "]\nDescription: " + this["desc"] + "\nAdded: " + this["added"] + "\nComplete: " + str(this["complete"]) + "\n")
+                print("ID: " + str(this["id"]) + "\nName: " + this["name"] + " [" + allids[i] + "]\nDescription: " + this["desc"] + "\nAdded: " + this["added"] + "\nComplete: " + str(this["complete"]) + "\n")
             else:
                 print("Codename: " + this["name"] + "\nNo information has been added for this entry.\n")
 
@@ -73,11 +76,11 @@ while True:
                 reallydo2 = input("Save changes (Y/N)? ").lower()
                 if reallydo2 == "y":
                     if viewdata["hasconfig"]:
-                        with open("C:/Screensavers/" + viewdata["codename"] + "/config.yaml","w") as f:
+                        with open(localfile(viewdata["codename"],"config.yaml"),"w") as f:
                             yaml.dump(viewconf,f)
                         print("Successfully written to file!\n")
                     if setasscrn == "y":
-                        with open("C:/Screensavers/globalconfig.yaml","w") as f:
+                        with open(localfile("globalconfig.yaml"),"w") as f:
                             yaml.dump({"cycle":[viewdata["codename"]],"screensaver":0},f)
                         print("Successfully set as screensaver!\n")
     elif option == 2:
@@ -107,10 +110,9 @@ while True:
                 reallydo = input("Change your screensavers to " + ", ".join(newscrnames) + " (Y/N)? ").lower()
                 if reallydo == "y":
                     globalconf = {"cycle":newscrcodes,"screensaver":0}
-                    with open("C:/Screensavers/globalconfig.yaml","w") as f:
+                    with open(localfile("globalconfig.yaml"),"w") as f:
                         yaml.dump(globalconf,f)
                     print("Successfully set a cycling screensaver!\n")
-
         else:
             newscr = input("What is the new screensaver's ID? ")
             if newscr != "":
@@ -118,8 +120,8 @@ while True:
                 reallydo = input("Change your screensaver to " + alldata[newscrname]["name"] + " (Y/N)? ").lower()
                 if reallydo == "y":
                     globalconf = {"cycle":[newscrname],"screensaver":0}
-                    with open("C:/Screensavers/globalconfig.yaml","w") as f:
+                    with open(localfile("globalconfig.yaml"),"w") as f:
                         yaml.dump(globalconf,f)
                     print("Successfully set as screensaver!\n")
     elif option == 3:
-        print("\nCustom SS Update Information\n\n" + globaldata["version"] + "\nTitle: " + globaldata["vertitle"] + "\nDescription: " + globaldata["verdesc"] + "\nDate updated: " + globaldata["date"] + "\n")
+        print("\nCustom SS Information\n\nPath Installed In: " + parentpath + "\n\nCurrent Version: " + globaldata["version"] + "\nTitle: " + globaldata["vertitle"] + "\nDescription: " + globaldata["verdesc"] + "\nDate updated: " + globaldata["date"] + "\n")
