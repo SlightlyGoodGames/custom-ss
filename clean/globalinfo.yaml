@@ -1,4 +1,4 @@
-version: Version 0.3
-vertitle: Added installer and support for different paths
-verdesc: Finalised the installer and support for different paths is now global.
-date: 19/04/2026
+version: Version 0.3a
+vertitle: Fixed bugs with paths
+verdesc: Fixed some bugs in which configurable paths did not work
+date: 20/04/2026
