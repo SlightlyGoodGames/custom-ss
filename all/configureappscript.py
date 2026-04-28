@@ -104,7 +104,7 @@ while True:
                 c = 0
                 for scr in newscrlist:
                     newscrlist[c] = scr = int(scr)
-                    newscrname = sort[scr-1]
+                    newscrname = allids[scr-1]
                     newscrcodes.append(newscrname)
                     newscrnames.append(alldata[newscrname]["name"])
                     c += 1
@@ -117,7 +117,7 @@ while True:
         else:
             newscr = input("What is the new screensaver's ID? ")
             if newscr != "":
-                newscrname = sort[int(newscr)-1]
+                newscrname = allids[int(newscr)-1]
                 reallydo = input("Change your screensaver to " + alldata[newscrname]["name"] + " (Y/N)? ").lower()
                 if reallydo == "y":
                     globalconf = {"cycle":[newscrname],"screensaver":0}

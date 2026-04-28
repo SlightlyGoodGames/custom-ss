@@ -1,0 +1,9 @@
+id: 6
+name: Image
+codename: image
+desc: Image display.
+added: v0.3.1
+complete: true
+hasconfig: true
+config:
+  imgpath: Path to image

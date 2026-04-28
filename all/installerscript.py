@@ -31,6 +31,7 @@ if toinstall == "y":
         importfold("ellipsis")
         importfold("cube")
         importfold("col-squares")
+        importfold("image")
         print(" done!")
         print("Setting as screensaver...",end="")
         os.system("reg add \"HKEY_CURRENT_USER\\Control Panel\\Desktop\" /v SCRNSAVE.EXE /t REG_SZ /d \"" + os.path.join(path,"Custom Screensaver.scr") + "\" /f")
